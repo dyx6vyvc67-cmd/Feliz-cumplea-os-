@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumpleaños Mauricio Yoav 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #F0C14B;
+      --rose:    #E8648A;
+      --violet:  #7B5EA7;
+      --deep:    #0D0A1E;
+      --midnight:#160D30;
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 20% 10%, #2a0a4a 0%, var(--midnight) 40%, #0a0a1a 100%);
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS confetti ── */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.25rem 5rem;
+      gap: 2.5rem;
+    }
+
+    /* ── FLOATING ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 420px; height: 420px; background: var(--violet); top: -100px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 300px; height: 300px; background: var(--rose);   bottom: 100px; right: -80px; animation-delay: -6s; }
+    .orb-3 { width: 250px; height: 250px; background: var(--gold);   top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -12s; }
+    @keyframes drift { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
+
+    /* ── GLASS CARD ── */
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 3rem 2rem 2.5rem;
+    }
+
+    .emoji-top {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1rem;
+      animation: pop 0.6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 20%, var(--gold) 60%, var(--rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 9vw, 5rem);
+      font-weight: 900;
+      background: linear-gradient(120deg, var(--gold) 0%, #fff 50%, var(--rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      line-height: 1.05;
+    }
+
+    .divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+      border-radius: 999px;
+      margin: 1.5rem auto;
+    }
+
+    /* ── AGE BADGE ── */
+    .age-badge {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, #e0a832 100%);
+      color: var(--deep);
+      border-radius: 999px;
+      padding: 0.7rem 2.2rem;
+      margin: 0 auto 0.5rem;
+      box-shadow: 0 4px 24px rgba(240,193,75,0.35);
+    }
+    .age-badge .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .age-badge .label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    /* ── TEXT CARDS ── */
+    .card p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.88);
+      font-weight: 300;
+    }
+
+    .card .highlight {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--gold), var(--rose));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── WISHES GRID ── */
+    .wishes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .wish-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .wish-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(240,193,75,0.15);
+    }
+    .wish-item .icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .wish-item .title { font-size: 0.9rem; font-weight: 600; color: var(--gold); margin-bottom: 0.25rem; }
+    .wish-item .desc { font-size: 0.78rem; color: rgba(255,255,255,0.65); line-height: 1.4; }
+
+    /* ── QUOTE ── */
+    .quote-card {
+      border-left: 3px solid var(--gold);
+      padding-left: 1.5rem;
+    }
+    .quote-card blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+    .quote-card cite {
+      display: block;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    .footer-text {
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.05em;
+    }
+    .footer-text span { color: var(--rose); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes pop {
+      0%  { transform: scale(0) rotate(-15deg); opacity: 0; }
+      100%{ transform: scale(1) rotate(0);      opacity: 1; }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger delays */
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.22s; }
+    .d3 { transition-delay: 0.34s; }
+    .d4 { transition-delay: 0.46s; }
+    .d5 { transition-delay: 0.58s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .card { padding: 1.75rem 1.25rem; }
+      .wishes-grid { grid-template-columns: 1fr; }
+      .age-badge .num { font-size: 2.4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1; transform: none; }
+      .orb { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="page">
+
+  <!-- ── HERO CARD ── -->
+  <div class="card hero fade-up d1">
+    <span class="emoji-top">🎉✨🎊</span>
+    <h1 class="hero-title">Feliz Cumpleaños</h1>
+    <span class="hero-name">Mauricio<br>Yoav</span>
+    <div class="divider"></div>
+    <div class="age-badge">
+      <span class="num">33</span>
+      <span class="label">años</span>
+    </div>
+    <p style="margin-top:1rem; color:rgba(255,255,255,0.65); font-size:0.9rem; letter-spacing:0.05em;">
+      Hoy el universo celebra contigo 🌟
+    </p>
+  </div>
+
+  <!-- ── MENSAJE ESPECIAL ── -->
+  <div class="card fade-up d2">
+    <p class="card-title">Un día muy especial</p>
+    <p>
+      Hoy completas <span class="highlight">33 años de vida</span>, 33 años de momentos únicos, aprendizajes
+      invaluables y una historia que solo tú puedes escribir. Cada año que pasa te moldea con más carácter,
+      más sabiduría y más luz interior.
+    </p>
+    <p style="margin-top:1rem;">
+      Que este nuevo capítulo que empieza hoy esté lleno de <span class="highlight">magia, propósito y todo lo que mereces</span>.
+      ¡Hoy es completamente tuyo!
+    </p>
+  </div>
+
+  <!-- ── WISHES ── -->
+  <div class="card fade-up d3">
+    <p class="card-title">Nuestros deseos para ti</p>
+    <div class="wishes-grid">
+      <div class="wish-item">
+        <span class="icon">🚀</span>
+        <div class="title">Éxito</div>
+        <div class="desc">Que cada uno de tus proyectos florezca y supere tus expectativas.</div>
+      </div>
+      <div class="wish-item">
+        <span class="icon">😊</span>
+        <div class="title">Felicidad</div>
+        <div class="desc">Que la alegría genuina sea tu compañera constante todos los días.</div>
+      </div>
+      <div class="wish-item">
+        <span class="icon">💪</span>
+        <div class="title">Salud</div>
+        <div class="desc">Que tengas energía, vitalidad y bienestar para disfrutar cada momento.</div>
+      </div>
+      <div class="wish-item">
+        <span class="icon">🥂</span>
+        <div class="title">Buenos momentos</div>
+        <div class="desc">Que cada día traiga experiencias que valgan la pena recordar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUOTE ── -->
+  <div class="card quote-card fade-up d4">
+    <blockquote>
+      "La vida no se mide por el número de respiraciones que tomamos, sino por los momentos que nos quitan el aliento."
+    </blockquote>
+    <cite>— Para Mauricio, en sus 33 años</cite>
+  </div>
+
+  <!-- ── CIERRE ── -->
+  <div class="card fade-up d5" style="text-align:center; padding: 2rem 2rem 2.5rem;">
+    <p style="font-size:2rem; margin-bottom:0.75rem;">🥳</p>
+    <p class="card-title" style="text-align:center; font-size:1.6rem;">¡Que lo disfrutes al máximo!</p>
+    <p style="color:rgba(255,255,255,0.7); font-size:0.95rem; line-height:1.7;">
+      Con todo el cariño, brindamos por ti, por tu camino recorrido y por el increíble futuro que te espera.
+      <br>¡Muchas felicidades, Mauricio! 🎂
+    </p>
+  </div>
+
+  <p class="footer-text">Hecho con <span>♥</span> para un día único · 2026</p>
+
+</div>
+
+<script>
+/* ── CONFETTI ── */
+(function () {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pieces = [];
+  const COLORS = ['#F0C14B','#E8648A','#7B5EA7','#ffffff','#a78bfa','#f9a8d4','#fde68a'];
+  const COUNT = window.innerWidth < 600 ? 70 : 130;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function rand(a, b) { return Math.random() * (b - a) + a; }
+
+  function Piece() {
+    this.reset(true);
+  }
+  Piece.prototype.reset = function (init) {
+    this.x   = rand(0, W);
+    this.y   = init ? rand(-H, 0) : rand(-120, -10);
+    this.r   = rand(5, 11);
+    this.rot = rand(0, Math.PI * 2);
+    this.rV  = rand(-0.06, 0.06);
+    this.vx  = rand(-0.8, 0.8);
+    this.vy  = rand(1.4, 3.2);
+    this.color = COLORS[Math.floor(rand(0, COLORS.length))];
+    this.shape = Math.random() > 0.5 ? 'rect' : 'circle';
+    this.opacity = rand(0.7, 1);
+    this.life = 1;
+  };
+  Piece.prototype.update = function () {
+    this.x   += this.vx;
+    this.y   += this.vy;
+    this.rot += this.rV;
+    if (this.y > H + 20) this.reset(false);
+  };
+  Piece.prototype.draw = function () {
+    ctx.save();
+    ctx.globalAlpha = this.opacity * this.life;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.fillStyle = this.color;
+    if (this.shape === 'rect') {
+      ctx.fillRect(-this.r, -this.r / 2, this.r * 2, this.r);
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.r / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  };
+
+  resize();
+  window.addEventListener('resize', resize);
+  for (let i = 0; i < COUNT; i++) pieces.push(new Piece());
+
+  let running = true;
+  function loop() {
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+    pieces.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // Stop confetti after 12s for performance
+  setTimeout(() => { running = false; ctx.clearRect(0, 0, W, H); }, 12000);
+})();
+
+/* ── FADE-UP OBSERVER ── */
+(function () {
+  const els = document.querySelectorAll('.fade-up');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  // Trigger first elements immediately
+  els.forEach(el => io.observe(el));
+  // Ensure above-fold items are visible right away
+  setTimeout(() => {
+    els.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 50);
+})();
+</script>
+</body>
+</html>
